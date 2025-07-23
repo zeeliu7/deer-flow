@@ -4,6 +4,7 @@
 import os
 import requests
 from src.rag.retriever import Chunk, Document, Resource, Retriever
+from typing import List, Optional
 from urllib.parse import urlparse
 
 
@@ -15,6 +16,7 @@ class RAGFlowProvider(Retriever):
     api_url: str
     api_key: str
     page_size: int = 10
+    cross_languages: Optional[List[str]] = None
 
     def __init__(self):
         api_url = os.getenv("RAGFLOW_API_URL")
@@ -30,11 +32,11 @@ class RAGFlowProvider(Retriever):
         page_size = os.getenv("RAGFLOW_PAGE_SIZE")
         if page_size:
             self.page_size = int(page_size)
-        
+
         self.cross_languages = None
         cross_languages = os.getenv("RAGFLOW_CROSS_LANGUAGES")
         if cross_languages:
-            self.cross_languages = cross_languages.split(',')
+            self.cross_languages = cross_languages.split(",")
 
     def query_relevant_documents(
         self, query: str, resources: list[Resource] = []
